@@ -11,24 +11,24 @@
         </div>
     </div>
     <div class="register">
-        <form method="post" name="signUp">
+        <form method="post" name="signUp" action="/signup">
             <p>
-                <label for="First Name">Firstname:</label>
-                <input type="text" name="fname" id="">
+                <label for="UserName">Username:</label>
+                <input type="text" name="reg[username]" id="">
             </p>
-            <p>
+            <!-- <p>
                 <label for="Last Name">Lastname:</label>
                 <input type="text" name="lname" id="">
-            </p>
+            </p> -->
 
             <p>
                 <label for="Password">Password:</label>
-                <input type="password" name="pass" id="">
+                <input type="password" name="reg[password]" id="">
             </p>
 
             <p>
                 <label for="Phone">Phone:</label>
-                <input type="number" name="phone" id="">
+                <input type="number" name="reg[phoneNo]" id="">
             </p>
 
             <!-- <p>
@@ -42,10 +42,10 @@
             </p> -->
 
 
-            <p class="full">
+            <!-- <p class="full">
                 <label for="Address">Address:</label>
                 <textarea name="" id="" cols="30" rows="7"></textarea>
-            </p>
+            </p> -->
             <p class="full">
                 <button>Submit</button>
             </p>
