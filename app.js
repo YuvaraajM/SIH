@@ -4,6 +4,7 @@ var express = require("express"),
 var LocalStrategy = require("passport-local").Strategy;
 var passport = require("passport");
 var passportLocalMongoose = require("passport-local-mongoose");
+require('dotenv/config');
 var User = require("./models/user.js");
 
 var app = express();
@@ -12,10 +13,8 @@ app.set("view-engine", "ejs");
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
-
-
 //MongoDB Conection
-const URI = 'mongodb+srv://Yuva_User:Yuva_User@datastore-fnmex.mongodb.net/test?retryWrites=true&w=majority';
+const URI = process.env.DB_CONNECTION;
 
 const connectDB = async () => {
     await mongoose.connect(URI, {
@@ -59,57 +58,64 @@ app.get("/signup", (req, res) => {
 });
 
 app.post("/signup", (req, res) => {
-    // Reg.create(req.body.reg, (err, newUser) => {
-    //     if (err) {
-    //         console.log("Error in user creation");
-    //     } else {
-    //         res.redirect("/");
-    //     }
-    // });
+//     Reg.create(req.body.reg, (err, newUser) => {
+//         if (err) {
+//             console.log("Error in user creation");
+//         } else {
+//             res.redirect("/");
+//         }
+//     });
+// });
     req.body.username
     req.body.password
     User.register(new User({ username: req.body.username }), req.body.password, (err, user) => {
         if (err) {
             console.log(err);
-            res.redirect("/reg");
+            res.redirect("/signup");
         }
         passport.authenticate("local")(req, res, function () {
-        res.redirect("/login");
+        res.redirect("/");
         });
     });
 });
 
+app.get("/signin", (req, res) => {
+    res.render("signin.ejs");
+});
+
 // app.post("/signin", (req, res) => {
-//     var username = req.body.username;
-//     var password = req.body.password;
-
-
-//     // console.log(username,password);
-//     Reg.findOne({ username: username, password: password })
-//         .then(user => {
-//             if (!user) {
-//                 res.redirect("/signin");
-//             }
-//             else {
-//                 res.redirect("/");
-//             }
-//         });
+    // var username = req.body.username;
+    // var password = req.body.password;
+    // Reg.findOne({ username: username, password: password },(err)=>{
+    //     if (err) {
+    //          res.redirect("/signin");
+    //     }
+    //     else {
+    //         res.redirect("/");
+    //     }
+    // })
+        // .then(user => {
+            // if (!user) {
+            //     res.redirect("/signin");
+            // }
+            // else {
+            //     res.redirect("/");
+            // }
+        // });
 // });
+
 
 app.post("/signin", passport.authenticate("local", {
     successRedirect: "/",
-    failureRedirect: "/login"
+    failureRedirect: "/signin"
 }), function (req,res) {
     res.redirect("/");
-});
-app.get("/signin", (req, res) => {
-    res.render("signin.ejs");
 });
 
 app.get("/about", (req, res) => {
     res.render("about.ejs");
 });
 
-app.listen("3000", function () {
+app.listen(process.env, function () {
     console.log("Server is Running!");
 });
